@@ -10,7 +10,7 @@ namespace NZWalks.API.Controllers
 	public class StudentsController : ControllerBase
 	{
 		// GET: https://localhost:portnumber/api/students
-		[HttpGet]
+		[HttpPost]
 		public IActionResult GetAllStudents()
 		{
 			string[] studentNames = new string[] { "Rabik", "Anamika", "Rebina", "Rohan" };
