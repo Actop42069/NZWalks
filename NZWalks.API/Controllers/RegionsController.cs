@@ -23,5 +23,22 @@ namespace NZWalks.API.Controllers
 			
 			return Ok(regions);
 		}
-	}
+
+
+        //GET Single Region (Get region by Id)
+        //GET https://localhost:portnumber/api/regions/{id}
+        [HttpGet]
+		[Route("{id:Guid}")]
+		public IActionResult GetById([FromRoute]Guid id)
+		{
+			// var region = dbContext.Regions.Find(id);
+			var region = dbContext.Regions.FirstOrDefault(x => x.Id == id);
+
+			if(region == null)
+			{
+				return NotFound();
+			}
+				return Ok(region);
+		}
+    }
 }
