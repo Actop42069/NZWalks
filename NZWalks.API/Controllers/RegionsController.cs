@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using NZWalks.API.Data;
 using NZWalks.API.Models.Domain;
 using NZWalks.API.Models.DTO;
+using System.Reflection.Metadata.Ecma335;
 
 namespace NZWalks.API.Controllers
 {
@@ -99,7 +100,7 @@ namespace NZWalks.API.Controllers
 		// Updaate Region
 		// PUT: https://localhost:portnumber/api/regions/{id}
 		[HttpPut]
-		[Route("{id : Guid}")]
+		[Route("{id:Guid}")]
 		public IActionResult Update([FromRoute] Guid id, [FromBody] UpdateRegionRequestDto updateRegionRequestDto)
 		{
 			// Check if the regions exist
@@ -125,6 +126,38 @@ namespace NZWalks.API.Controllers
 				Name = regionDomainModel.Name,
 				RegionImageUrl = regionDomainModel.RegionImageUrl
 			};
+			return Ok(regionDto);
+
+		
+		}
+		// Delete a region
+		// DELETE : https://localhost:portnumber/api/regions/{id}
+
+		[HttpDelete]
+		[Route("{id:Guid}")]
+		public IActionResult Delete([FromRoute] Guid id)
+		{
+			// check if the DB exists
+			var regionDomainModel = dbContext.Regions.FirstOrDefault(x => x.Id == id);
+			if(regionDomainModel == null)
+			{
+				return NotFound();
+			}
+
+			// Delete region
+			dbContext.Regions.Remove(regionDomainModel);
+			dbContext.SaveChanges();
+
+			// return deleted Region Back
+			// map Domain model back to DTO
+			var regionDto = new RegionDto
+			{
+				Id = regionDomainModel.Id,
+				Code = regionDomainModel.Code,
+				Name = regionDomainModel.Name,
+				RegionImageUrl = regionDomainModel.RegionImageUrl
+			};
+
 			return Ok(regionDto);
 		}
 	}
